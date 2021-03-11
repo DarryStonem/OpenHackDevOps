@@ -39,4 +39,4 @@ jobs:
     - name: Unit Testing
       run: |
           dotnet restore ./apis/poi/
-          dotnet test /apis/poi/tests/UnitTests/UnitTests.csproj
+          dotnet test ./apis/poi/tests/UnitTests/UnitTests.csproj
