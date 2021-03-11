@@ -24,7 +24,7 @@ jobs:
       with:
           context: ./apis/poi/web/
           push: false
-          tags: user/app:latest
+          tags: devopsoh/api-poi:${{ GITHUB_RUN_ID }}
           
     - name: Unit Testing
       run: |
