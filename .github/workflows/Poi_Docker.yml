@@ -45,4 +45,4 @@ jobs:
         with:
             context: ./apis/poi/web/
             push: true
-            tags: devopsoh/api-poi:${{ github.run_number }}
+            tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
