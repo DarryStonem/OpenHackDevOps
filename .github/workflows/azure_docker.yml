@@ -35,3 +35,9 @@ jobs:
           context: ./apis/poi/web/
           push: false
           tags: user/app:latest
+          
+    - name: Unit Testing
+      run: |
+          dotnet restore 
+          dotnet build --configuration Release
+          dotnet test -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
