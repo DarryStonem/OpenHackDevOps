@@ -6,9 +6,6 @@ on:
     paths:
     - 'apis/userprofile/**'
 
-env:
-  IMAGE: static-sites
-
 jobs:
   setup-build:
     name: Setup, Build
