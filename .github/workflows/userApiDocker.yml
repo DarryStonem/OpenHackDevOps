@@ -25,4 +25,4 @@ jobs:
       with:
           context: ./apis/userprofile/
           push: false
-          tags: devopsoh/api-userprofile:$CI_REPOSITORY_SLUG
+          tags: devopsoh/api-userprofile:${{ github.sha }}
