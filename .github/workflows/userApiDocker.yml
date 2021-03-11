@@ -28,4 +28,4 @@ jobs:
       with:
           context: ./apis/userprofile/
           push: false
-          tags: devopsoh/api-userprofile:latest
+          tags: devopsoh/api-userprofile:$GITHUB_RUN_ID
