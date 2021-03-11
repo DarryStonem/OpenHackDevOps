@@ -14,7 +14,7 @@ name: build docker
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
 
 env:
   IMAGE: static-site
