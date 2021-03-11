@@ -67,7 +67,7 @@ jobs:
       - name: Publish to Azure
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'openhackjap2c1y4poi'
+          app-name: 'openhackjap2c1y4trips'
           publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_TRIPS }}
           images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-trips:${{ github.run_number }}
             
