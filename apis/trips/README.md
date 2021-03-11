@@ -28,5 +28,5 @@ To run all integration tests, execute:
 go test
 ```
 
-> Note: this requires an actual database connection, so the required ENV variables need to be present.
+> Note: this requires an actual database connection, so the required ENV variables need to be present..
 > 
