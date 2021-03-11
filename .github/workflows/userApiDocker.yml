@@ -21,7 +21,7 @@ jobs:
 
     - name: Unit Testing
       run: |
-          npm run test
+          npm run test ./apis/userprofile/
 
     - name:  Build
       uses: docker/build-push-action@v2
