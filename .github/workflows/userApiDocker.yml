@@ -50,7 +50,7 @@ jobs:
             tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-userprofile:${{ github.run_number }}
 
   publish:
-    name: Publish to ACR
+    name: Publish to ACR-
     runs-on: ubuntu-latest
     needs: deploy
     if: github.ref == 'refs/heads/main'
