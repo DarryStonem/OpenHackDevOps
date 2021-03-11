@@ -10,11 +10,11 @@
 #
 # For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke
 
-name: Build and Deploy to GKE
+name: build docker
 
 on:
-  release:
-    types: [created]
+  pull_request:
+    branches: [master]
 
 env:
   IMAGE: static-site
