@@ -25,9 +25,12 @@ jobs:
           context: ./apis/user-java/src/main/java/io/swagger/
           push: false
           tags: user/app:latest
-          
+
+
+#
 #    - name: Unit Testing
 #      run: |
 #          dotnet restore ./apis/user-java/
 #          dotnet test ./apis/user-java/src/test/java/UserApiControllerTest.java
 #          dotnet test ./apis/user-java/src/test/java/UserRepositoryServiceTest.java
+#
