@@ -3,8 +3,6 @@ name: Build Docker
 on:
   pull_request:
     branches: [main]
-    paths:
-    - 'apis/poi/**'
 
 env:
   IMAGE: static-sites
@@ -29,3 +27,11 @@ jobs:
       run: |
           dotnet restore ./apis/poi/
           dotnet test ./apis/poi/tests/UnitTests/UnitTests.csproj
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: setup-build
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy app
+        run: exit 0
