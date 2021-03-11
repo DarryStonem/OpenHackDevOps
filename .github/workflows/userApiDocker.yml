@@ -5,7 +5,12 @@ on:
     branches: [main]
     paths:
     - 'apis/userprofile/**'
-
+    - '.github/workflows/userApiDocker.yml'
+  push:
+    branches: [main]
+    paths:
+    - 'apis/userprofile/**'
+    - '.github/workflows/userApiDocker.yml'
 jobs:
   setup-build:
     name: Setup, Build
