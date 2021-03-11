@@ -1,10 +1,16 @@
-name: Build DockerFile for User API
+name: Build Docker userprofile
 
 on:
   pull_request:
     branches: [main]
     paths:
     - 'apis/userprofile/**'
+    - '.github/workflows/userApiDocker.yml'
+  push:
+    branches: [main]
+    paths:
+    - 'apis/userprofile/**'
+    - '.github/workflows/userApiDocker.yml'
 
 jobs:
   setup-build:
@@ -15,13 +21,47 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # - name: Unit Testing
-    #   run: |
-    #       npm run test --prefix ./apis/userprofile/
+    - name: Build Code
+      run: |
+          dotnet restore ./apis/userprofile/
+          dotnet build ./apis/userprofile/
+   
+  deploy:
+    name: Publish to ACR
+    runs-on: ubuntu-latest
+    needs: setup-build
+    if: github.ref == 'refs/heads/main'
 
-    - name:  Build
-      uses: docker/build-push-action@v2
-      with:
-          context: ./apis/userprofile/
-          push: false
-          tags: devopsoh/api-userprofile:${{ github.run_number }}
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: openhackjap2c1y4acr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name:  Build & Publish
+        uses: docker/build-push-action@v2
+        with:
+            context: ./apis/userprofile/web/
+            push: true
+            tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-userprofile:${{ github.run_number }}
+
+  publish:
+    name: Publish USER PROFILE
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - name: Publish to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'openhackjap2c1y4userprofile'
+          publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_USERPROFILE }}
+          images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-userprofile:${{ github.run_number }}
