@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-    - './apis/poi/'
+    - './apis/poi/**'
 
 env:
   IMAGE: static-sites
