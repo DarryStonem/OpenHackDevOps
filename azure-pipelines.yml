@@ -27,3 +27,11 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/apis/poi/web/Dockerfile'
         tags: |
           $(tag)
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\*test*.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        searchFolder: '$(System.DefaultWorkingDirectory)'
