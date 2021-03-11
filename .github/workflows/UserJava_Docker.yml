@@ -24,7 +24,7 @@ jobs:
       with:
           context: ./apis/user-java/src/main/java/io/swagger/
           push: false
-          tags: user/app:latest
+          tags: devopsoh/api-user-java:${{ github.run_number }}
 
 
 #
