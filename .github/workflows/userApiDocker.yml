@@ -25,4 +25,4 @@ jobs:
       with:
           context: ./apis/userprofile/
           push: false
-          tags: devopsoh/api-userprofile:${{ GITHUB_RUN_ID }}
+          tags: devopsoh/api-userprofile:${{ github.GITHUB_RUN_ID }}
