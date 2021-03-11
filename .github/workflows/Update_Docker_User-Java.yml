@@ -1,0 +1,33 @@
+name: Update Docker User-Java
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+    - 'apis/user-java/**'
+
+env:
+  IMAGE: static-sites
+
+jobs:
+  setup-build:
+    name: Setup, Build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name:  Build
+      uses: docker/build-push-action@v2
+      with:
+          context: ./apis/user-java/src/main/java/io/swagger/
+          push: false
+          tags: user/app:latest
+          
+#    - name: Unit Testing
+#      run: |
+#          dotnet restore ./apis/user-java/
+#          dotnet test ./apis/user-java/src/test/java/UserApiControllerTest.java
+#          dotnet test ./apis/user-java/src/test/java/UserRepositoryServiceTest.java
