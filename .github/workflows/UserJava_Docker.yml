@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
     - 'apis/user-java/**'
+    - '.github/workflows/UserJava_Docker.yml'
+  push:
+    branches: [main]
+    paths:
+    - 'apis/user-java/**'
+    - '.github/workflows/UserJava_Docker.yml'	
 
 env:
   IMAGE: static-sites
@@ -25,7 +31,6 @@ jobs:
           push: false
           tags: devopsoh/api-user-java:${{ github.run_number }}
 
-
 #
 #    - name: Unit Testing
 #      run: |
@@ -33,3 +38,43 @@ jobs:
 #          dotnet test ./apis/user-java/src/test/java/UserApiControllerTest.java
 #          dotnet test ./apis/user-java/src/test/java/UserRepositoryServiceTest.java
 #
+
+  deploy:
+    name: Publish to ACR
+    runs-on: ubuntu-latest
+    needs: setup-build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: openhackjap2c1y4acr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name:  Build & Publish
+        uses: docker/build-push-action@v2
+        with:
+            context: ./apis/user-java/
+            push: true
+            tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-user-java:${{ github.run_number }}
+
+  publish:
+    name: Publish UserProfile
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - name: Publish to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'openhackjap2c1y4userjava'
+          publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_USER_JAVA }}
+          images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-user-java:${{ github.run_number }}
