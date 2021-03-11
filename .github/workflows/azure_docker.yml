@@ -10,14 +10,14 @@
 #
 # For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke
 
-name: build docker
+name: Build Docker
 
 on:
   pull_request:
     branches: [main]
 
 env:
-  IMAGE: static-site
+  IMAGE: static-sites
 
 jobs:
   setup-build:
@@ -32,7 +32,6 @@ jobs:
     - name:  Build
       uses: docker/build-push-action@v2
       with:
-          context: .
+          context: ./apis/poi/web/
           push: false
           tags: user/app:latest
-
