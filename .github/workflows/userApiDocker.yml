@@ -19,9 +19,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Unit Testing
-      run: |
-          npm run test --prefix ./apis/userprofile/
+    # - name: Unit Testing
+    #   run: |
+    #       npm run test --prefix ./apis/userprofile/
 
     - name:  Build
       uses: docker/build-push-action@v2
