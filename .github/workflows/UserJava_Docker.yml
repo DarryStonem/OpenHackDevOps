@@ -13,7 +13,6 @@ jobs:
   setup-build:
     name: Setup, Build
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
     - name: Checkout
@@ -24,7 +23,7 @@ jobs:
       with:
           context: ./apis/user-java/
           push: false
-          tags: user/app:latest
+          tags: devopsoh/api-user-java:${{ github.run_number }}
 
 
 #
