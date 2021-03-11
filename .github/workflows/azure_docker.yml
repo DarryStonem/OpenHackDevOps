@@ -35,3 +35,8 @@ jobs:
           context: ./apis/poi/web/
           push: false
           tags: user/app:latest
+          
+    - name: Unit Testing
+      run: |
+          dotnet restore ./apis/poi/
+          dotnet test ./apis/poi/tests/UnitTests/UnitTests.csproj
