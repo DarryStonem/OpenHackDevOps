@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
     - 'apis/poi/**'
+    - '.github/workflows/Poi_Docker.yml'
   push:
     branches: [main]
     paths:
     - 'apis/poi/**'
+    - '.github/workflows/Poi_Docker.yml'
 
 jobs:
   setup-build:
