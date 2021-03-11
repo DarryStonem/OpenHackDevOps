@@ -7,6 +7,7 @@ namespace poi.Models
     {
         public Healthcheck()
         {
+            
             Message = "POI Service Healthcheck";
             Status = "Healthy";
         }
