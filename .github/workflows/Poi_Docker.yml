@@ -17,7 +17,10 @@ jobs:
     name: Publicar en Azure la imagen
     runs-on: ubuntu-latest        
     steps:
-      - name: Validar que el sitio en staging este ok        
+      - name: Validar que el sitio en staging este ok                   
         run: |
-              chmod +x ./polling.sh
-              ./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
+              echo pwd
+              #chmod +x ./polling.sh
+              #./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
+              
+              
