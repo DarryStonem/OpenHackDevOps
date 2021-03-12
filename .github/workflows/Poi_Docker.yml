@@ -13,10 +13,69 @@ on:
     - '.github/workflows/Poi_Docker.yml'
 
 jobs:
+  setup-build:
+    name: Setup, Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build Code
+      run: |
+          dotnet restore ./apis/poi/
+          dotnet build ./apis/poi/
+
+    - name: Unit Testing
+      run: |
+          dotnet test ./apis/poi/tests/UnitTests/UnitTests.csproj
+
+  deploy:
+    name: Generar imagen Docker
+    runs-on: ubuntu-latest
+    needs: setup-build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: openhackjap2c1y4acr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name:  Build & Publish
+        uses: docker/build-push-action@v2
+        with:
+            context: ./apis/poi/web/
+            push: true
+            tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
+
+  publish_staging:
+    name: Publicar en staging la imagen
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
+      - name: Publish to Azure (Staging)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'openhackjap2c1y4poi'
+          slot-name: 'staging'
+          publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_POI_STAGING }}
+          images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
+          
   validate_site:
     name: Publicar en Azure la imagen
-    runs-on: ubuntu-latest 
-           
+    runs-on: ubuntu-latest
+    needs: publish_staging
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,3 +83,23 @@ jobs:
       - name: Validar que el sitio en staging este ok        
         run: |
               sh polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
+
+  publish_azure_prod:
+    name: Si el sitio esta ok publicar en producción
+    runs-on: ubuntu-latest
+    needs: publish_staging
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_POI }}    
+
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az webapp deployment slot swap  -g openhackjap2c1y4rg -n openhackjap2c1y4poi --slot staging \ --target-slot production
+          
+          
