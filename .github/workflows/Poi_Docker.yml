@@ -82,7 +82,7 @@ jobs:
         
       - name: Validar que el sitio en staging este ok        
         run: |
-              sh ./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
+              ./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
 
   publish_azure_prod:
     name: Si el sitio esta ok publicar en producción
