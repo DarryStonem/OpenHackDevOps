@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+        
       - name: Validar que el sitio en staging este ok        
         run: |
               sh polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
