@@ -67,5 +67,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'openhackjap2c1y4poi'
+          slot-name: 'openhackjap2c1y4poi-staging'
           publish-profile: ${{ secrets.azureWebAppPublishProfile }}
           images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
