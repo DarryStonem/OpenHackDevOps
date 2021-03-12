@@ -13,60 +13,19 @@ on:
     - '.github/workflows/Poi_Docker.yml'
 
 jobs:
-  setup-build:
-    name: Setup, Build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build Code
-      run: |
-          dotnet restore ./apis/poi/
-          dotnet build ./apis/poi/
-
-    - name: Unit Testing
-      run: |
-          dotnet test ./apis/poi/tests/UnitTests/UnitTests.csproj
-
-  deploy:
-    name: Generar imagen Docker
-    runs-on: ubuntu-latest
-    needs: setup-build
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: 'Checkout Github Action'
-        uses: actions/checkout@master
-
-      - uses: azure/docker-login@v1
-        with:
-          login-server: openhackjap2c1y4acr.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      - name:  Build & Publish
-        uses: docker/build-push-action@v2
-        with:
-            context: ./apis/poi/web/
-            push: true
-            tags: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
-
-  publish:
+  validate_site:
     name: Publicar en Azure la imagen
-    runs-on: ubuntu-latest
-    needs: deploy
+    runs-on: ubuntu-latest    
     if: github.ref == 'refs/heads/main'
-
     steps:
-      - name: 'Checkout Github Action'
-        uses: actions/checkout@master
-
-      - name: Publish to Azure
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'openhackjap2c1y4poi'
-          slot-name: 'staging'
-          publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_POI }}
-          images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
+      - name: Validar que el sitio en staging este ok        
+        run: |
+              declare result
+              resutl=$(curl -i 'https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi' 2>/dev/null | grep HTTP/1.1)
+              
+              if [[ -z $result ]]; then 
+                exit code -1
+              else
+                # status=${result:9:3}
+                exit code 0
+              fi 
