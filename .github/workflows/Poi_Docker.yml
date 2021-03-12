@@ -15,8 +15,7 @@ on:
 jobs:
   validate_site:
     name: Publicar en Azure la imagen
-    runs-on: ubuntu-latest    
-    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest        
     steps:
       - name: Validar que el sitio en staging este ok        
         run: |
