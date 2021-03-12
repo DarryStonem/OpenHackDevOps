@@ -70,3 +70,4 @@ jobs:
           slot-name: 'openhackjap2c1y4poi-staging'
           publish-profile: ${{ secrets.AZUREWEBAPPPUBLISHPROFILE_POI }}
           images: openhackjap2c1y4acr.azurecr.io/devopsoh/api-poi:${{ github.run_number }}
+
