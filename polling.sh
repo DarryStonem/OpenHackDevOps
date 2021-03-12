@@ -1,19 +1,17 @@
 #!/bin/bash
-
 declare -i duration=1
 declare hasUrl=""
 declare endpoint
-
+declare COUNTER=0
+declare limit=40
 usage() {
     cat <<END
     polling.sh [-i] [-h] endpoint
-    
     Report the health status of the endpoint
     -i: include Uri for the format
     -h: help
 END
 }
-
 while getopts "ih" opt; do 
   case $opt in 
     i)
@@ -29,9 +27,7 @@ while getopts "ih" opt; do
      ;;
   esac
 done
-
 shift $((OPTIND -1))
-
 if [[ $1 ]]; then
   endpoint=$1
 else
@@ -39,21 +35,21 @@ else
   usage
   exit 1 
 fi 
-
-
 healthcheck() {
     declare url=$1
-    result=$(curl -i $url 2>/dev/null | grep HTTP/1.1)
-    echo $result
+    result= curl $url -H "Accept: application/json"
+#    echo $result
 }
-
 while [[ true ]]; do
    result=`healthcheck $endpoint` 
    declare status
    if [[ -z $result ]]; then 
       status="N/A"
    else
-      status=${result:9:3}
+      status=${result}
+      status="OK"
+#      echo $status
+       exit 0
    fi 
    timestamp=$(date "+%Y%m%d-%H%M%S")
    if [[ -z $hasUrl ]]; then
@@ -62,4 +58,8 @@ while [[ true ]]; do
      echo "$timestamp | $status | $endpoint " 
    fi 
    sleep $duration
+   COUNTER=$((COUNTER + 1))
+   if [[ $COUNTER -eq $limit ]]; then
+     exit 1
+   fi
 done
