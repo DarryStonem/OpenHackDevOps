@@ -19,4 +19,5 @@ jobs:
     steps:
       - name: Validar que el sitio en staging este ok        
         run: |
-              $(curl -i 'https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi' 2>/dev/null | grep HTTP/1.1)
+              chmod +x ./polling.sh
+              ./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
