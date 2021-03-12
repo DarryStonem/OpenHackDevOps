@@ -24,3 +24,4 @@ jobs:
         run: |
               chmod +x ./polling.sh
               ./polling.sh -i https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi
+
