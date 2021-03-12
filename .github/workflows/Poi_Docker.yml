@@ -17,6 +17,9 @@ jobs:
     name: Publicar en Azure la imagen
     runs-on: ubuntu-latest        
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
       - name: Validar que el sitio en staging este ok        
         run: |
               chmod +x ./polling.sh
