@@ -19,9 +19,10 @@ jobs:
     steps:
       - name: Validar que el sitio en staging este ok        
         run: |
+              echo 'Inicio'
               declare result
               resutl=$(curl -i 'https://openhackjap2c1y4poi-staging.azurewebsites.net/api/healthcheck/poi' 2>/dev/null | grep HTTP/1.1)
-              
+              echo $result
               if [[ -z $result ]]; then 
                 exit code -1
               else
